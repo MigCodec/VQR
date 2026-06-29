@@ -1187,9 +1187,18 @@ button {
     transform: none;
 }
 
+.account-vqr-card .card-main-row {
+    grid-template-columns: minmax(0, 1fr) minmax(82px, 112px);
+}
+
+.account-card-real-qr {
+    width: 100%;
+}
+
 .account-card-real-qr img {
-    width: 112px;
-    height: 112px;
+    width: 100%;
+    aspect-ratio: 1;
+    height: auto;
 }
 
 .account-card-url {
@@ -1342,6 +1351,83 @@ button {
 
     .card-qr-block {
         padding: 7px;
+    }
+
+    .account-vqr-card {
+        padding: 14px;
+    }
+
+    .account-vqr-card .card-topline {
+        gap: 10px;
+    }
+
+    .account-vqr-card .card-brand {
+        font-size: 28px;
+    }
+
+    .account-vqr-card .card-tagline {
+        margin-top: 5px;
+        font-size: 9px;
+    }
+
+    .account-vqr-card .nfc-mark {
+        width: 40px;
+        height: 34px;
+    }
+
+    .account-vqr-card .nfc-mark span {
+        border-width: 2px;
+    }
+
+    .account-vqr-card .nfc-mark span:nth-child(1) {
+        width: 14px;
+        height: 16px;
+    }
+
+    .account-vqr-card .nfc-mark span:nth-child(2) {
+        width: 24px;
+        height: 26px;
+    }
+
+    .account-vqr-card .nfc-mark span:nth-child(3) {
+        width: 36px;
+        height: 36px;
+    }
+
+    .account-vqr-card .card-main-row {
+        grid-template-columns: minmax(0, 1fr) minmax(72px, 29%);
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    .account-vqr-card .card-label {
+        font-size: 9px;
+        letter-spacing: 0.08em;
+    }
+
+    .account-vqr-card .card-plate {
+        margin: 5px 0;
+        font-size: 30px;
+    }
+
+    .account-vqr-card .card-helper {
+        font-size: 10px;
+    }
+
+    .account-vqr-card .card-qr-block {
+        padding: 5px;
+        border-radius: 10px;
+    }
+
+    .account-vqr-card .card-footer {
+        gap: 4px;
+        margin-top: 10px;
+        font-size: 7px;
+    }
+
+    .account-vqr-card .card-footer span {
+        padding: 4px 6px;
     }
 
     .qr-mark-large {
