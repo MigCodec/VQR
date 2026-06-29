@@ -85,6 +85,31 @@ class GoogleAuthTest extends TestCase
         $this->assertSame(1, User::where('email', 'existente@vqr.test')->count());
     }
 
+    public function test_google_callback_verifies_and_links_existing_unverified_user_by_email(): void
+    {
+        $existingUser = User::factory()->unverified()->create([
+            'email' => 'sinverificar@vqr.test',
+            'google_id' => null,
+        ]);
+
+        $this->mockGoogleUser(
+            id: 'google-unverified',
+            name: 'Cuenta Verificada Google',
+            email: 'sinverificar@vqr.test',
+            avatar: 'https://example.com/avatar-unverified.jpg',
+        );
+
+        $this->get(route('auth.google.callback'))
+            ->assertRedirect(route('billing.show'));
+
+        $existingUser->refresh();
+
+        $this->assertAuthenticatedAs($existingUser);
+        $this->assertSame('google-unverified', $existingUser->google_id);
+        $this->assertNotNull($existingUser->email_verified_at);
+        $this->assertSame(1, User::where('email', 'sinverificar@vqr.test')->count());
+    }
+
     public function test_google_callback_redirects_active_user_to_account(): void
     {
         $existingUser = User::factory()->create([

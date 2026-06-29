@@ -73,7 +73,7 @@
                                     <p class="card-helper">Escanea para ver vehiculos</p>
                                 </div>
                                 <div class="card-qr-block account-card-real-qr">
-                                    <img src="{{ rtrim(config('app.url'), '/') }}/account/cards/{{ $accountCard->id }}/qr.svg" alt="QR de tarjeta VQR">
+                                    <img src="{{ route('account.cards.qr', $accountCard) }}" alt="QR de tarjeta VQR">
                                 </div>
                             </div>
 

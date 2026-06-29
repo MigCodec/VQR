@@ -26,8 +26,7 @@ class GoogleAuthController extends Controller
         $user = User::query()
             ->where('google_id', $googleUser->getId())
             ->orWhere(function ($query) use ($googleUser) {
-                $query->where('email', $googleUser->getEmail())
-                    ->whereNotNull('email_verified_at');
+                $query->where('email', $googleUser->getEmail());
             })
             ->first();
 

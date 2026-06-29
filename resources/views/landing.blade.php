@@ -45,7 +45,7 @@
                     </a>
                     <nav class="nav-actions">
                         <a href="#planes" class="btn btn-outline">Ver planes</a>
-                        <a href="/auth/google/redirect" class="btn btn-navy">Crear cuenta</a>
+                        <a href="/auth/google/redirect" class="btn btn-navy">Ingresar</a>
                     </nav>
                 </header>
 
@@ -62,7 +62,7 @@
                             <span>Con avisos de vencimiento</span>
                         </div>
                         <div class="action-row">
-                            <a href="/auth/google/redirect" class="btn btn-primary">Crear mi cuenta</a>
+                            <a href="/auth/google/redirect" class="btn btn-primary">Ingresar</a>
                             <a href="#beneficios" class="btn btn-outline">Conocer VQR</a>
                         </div>
                     </div>
@@ -292,7 +292,7 @@
                         <h2 class="section-title">Ten tus papeles listos antes de que te los pidan.</h2>
                         <p class="section-text">Crea tu cuenta, sube tus documentos y usa VQR desde tu celular.</p>
                     </div>
-                    <a href="/auth/google/redirect" class="btn btn-primary">Crear mi cuenta</a>
+                    <a href="/auth/google/redirect" class="btn btn-primary">Ingresar</a>
                 </div>
             </div>
         </section>
