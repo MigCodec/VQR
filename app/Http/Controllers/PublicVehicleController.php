@@ -70,7 +70,7 @@ class PublicVehicleController extends Controller
             ->with('activeUsers.activeSubscription')
             ->firstOrFail();
 
-        abort_unless($document->vehicle_id === $vehicle->id, 404);
+        abort_unless((int) $document->vehicle_id === (int) $vehicle->id, 404);
 
         if (! $this->hasActiveSubscribedUser($vehicle)) {
             abort(response()->view('public.subscription-expired', [

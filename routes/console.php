@@ -106,7 +106,7 @@ Artisan::command('vqr:diagnose-document-url {vehicleToken} {documentToken}', fun
         return self::FAILURE;
     }
 
-    $this->line('Relation: '.($document->vehicle_id === $vehicle->id ? 'OK' : 'MISMATCH'));
+    $this->line('Relation: '.((int) $document->vehicle_id === (int) $vehicle->id ? 'OK' : 'MISMATCH'));
     $this->line('Subscribed owner: '.($vehicle->activeUsers->contains(fn ($user) => $user->hasActiveSubscription()) ? 'YES' : 'NO'));
     $this->line('file_path: '.($document->file_path ?: 'NULL'));
 
