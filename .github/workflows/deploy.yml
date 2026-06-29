@@ -62,21 +62,48 @@ jobs:
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           DEPLOY_BRANCH: ${{ secrets.DEPLOY_BRANCH || github.ref_name }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          REPOSITORY_TOKEN: ${{ secrets.REPOSITORY_TOKEN }}
         run: |
           set -euo pipefail
 
-          ssh deploy-host "DEPLOY_PATH='$DEPLOY_PATH' DEPLOY_BRANCH='$DEPLOY_BRANCH' GITHUB_REPOSITORY='$GITHUB_REPOSITORY' bash -s" <<'EOF'
+          ssh deploy-host "DEPLOY_PATH='$DEPLOY_PATH' DEPLOY_BRANCH='$DEPLOY_BRANCH' GITHUB_REPOSITORY='$GITHUB_REPOSITORY' REPOSITORY_TOKEN='$REPOSITORY_TOKEN' bash -s" <<'EOF'
           set -euo pipefail
 
+          if [ -n "${REPOSITORY_TOKEN:-}" ]; then
+            REPOSITORY_URL="https://x-access-token:${REPOSITORY_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          else
+            REPOSITORY_URL="git@github.com:${GITHUB_REPOSITORY}.git"
+          fi
+
+          mkdir -p "$DEPLOY_PATH"
+
+          if [ ! -d "$DEPLOY_PATH/.git" ]; then
+            if [ -n "$(find "$DEPLOY_PATH" -mindepth 1 -maxdepth 1 -print -quit)" ]; then
+              echo "DEPLOY_PATH exists but is not a git repository: $DEPLOY_PATH"
+              echo "Set DEPLOY_PATH to the Laravel project root, or use an empty folder for the first clone."
+              exit 1
+            fi
+
+            git clone --branch "$DEPLOY_BRANCH" "$REPOSITORY_URL" "$DEPLOY_PATH"
+          fi
+
           cd "$DEPLOY_PATH"
+
+          if [ ! -f artisan ]; then
+            echo "artisan was not found in $DEPLOY_PATH"
+            echo "DEPLOY_PATH must point to the Laravel project root."
+            exit 1
+          fi
+
           trap 'php artisan up || true' EXIT
 
           php artisan down || true
 
-          git remote set-url origin "git@github.com:${GITHUB_REPOSITORY}.git"
+          git remote set-url origin "$REPOSITORY_URL"
           git fetch origin "$DEPLOY_BRANCH"
           git checkout "$DEPLOY_BRANCH"
           git pull --ff-only origin "$DEPLOY_BRANCH"
+          git remote set-url origin "git@github.com:${GITHUB_REPOSITORY}.git"
 
           composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
