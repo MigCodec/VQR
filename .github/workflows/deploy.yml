@@ -22,6 +22,7 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}
         run: |
           set -euo pipefail
 
@@ -31,6 +32,19 @@ jobs:
           printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_host_key
           chmod 600 ~/.ssh/deploy_host_key
 
+          eval "$(ssh-agent -s)"
+
+          if [ -n "${SSH_PRIVATE_KEY_PASSPHRASE:-}" ]; then
+            cat > ~/.ssh/askpass.sh <<'EOF'
+          #!/usr/bin/env bash
+          printf '%s\n' "$SSH_PRIVATE_KEY_PASSPHRASE"
+          EOF
+            chmod 700 ~/.ssh/askpass.sh
+            DISPLAY=:0 SSH_ASKPASS=~/.ssh/askpass.sh SSH_ASKPASS_REQUIRE=force ssh-add ~/.ssh/deploy_host_key < /dev/null
+          else
+            ssh-add ~/.ssh/deploy_host_key
+          fi
+
           ssh-keyscan -p "${SSH_PORT:-22}" "$SSH_HOST" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
@@ -39,8 +53,7 @@ jobs:
             HostName $SSH_HOST
             Port ${SSH_PORT:-22}
             User $SSH_USER
-            IdentityFile ~/.ssh/deploy_host_key
-            IdentitiesOnly yes
+            IdentityAgent $SSH_AUTH_SOCK
             StrictHostKeyChecking yes
           EOF
 

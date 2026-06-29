@@ -10,10 +10,11 @@ Configurar en `Settings > Secrets and variables > Actions`:
 - `SSH_PORT`: puerto SSH, normalmente `22`.
 - `SSH_USER`: usuario SSH del servidor.
 - `SSH_PRIVATE_KEY`: llave privada que GitHub Actions usara para entrar al servidor.
+- `SSH_PRIVATE_KEY_PASSPHRASE`: clave/passphrase de la llave privada, si la llave la tiene. Si la llave no tiene clave, dejar sin crear o vacio.
 - `DEPLOY_PATH`: carpeta exacta del proyecto en el servidor, por ejemplo `/var/www/vqr`.
 - `DEPLOY_BRANCH`: rama a desplegar, por ejemplo `main`. Si se omite, usa la rama que disparo el workflow.
 
-La llave privada de `SSH_PRIVATE_KEY` debe corresponder a una llave cuya publica este en `~/.ssh/authorized_keys` del usuario `SSH_USER` en el servidor.
+La llave privada de `SSH_PRIVATE_KEY` debe corresponder a una llave cuya publica este en `~/.ssh/authorized_keys` del usuario `SSH_USER` en el servidor. Si esa llave fue creada desde cPanel y tiene clave, guardar esa clave en `SSH_PRIVATE_KEY_PASSPHRASE`.
 
 Esta llave no es la misma que la deploy key de GitHub. Se usan dos llaves:
 
