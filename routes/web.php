@@ -40,3 +40,4 @@ Route::get('/t/{shortCode}', [PublicCardController::class, 'show'])->name('publi
 Route::get('/t/{shortCode}/qr.svg', [PublicCardQrController::class, 'show'])->name('public.cards.qr');
 Route::get('/v/{publicToken}', [PublicVehicleController::class, 'show'])->name('public.vehicles.show');
 Route::get('/v/{publicToken}/documents/{document:public_token}', [PublicVehicleController::class, 'document'])->name('public.vehicles.documents.show');
+Route::get('/v/{publicToken}/documents/{document:public_token}/file', [PublicVehicleController::class, 'documentFile'])->name('public.vehicles.documents.file');

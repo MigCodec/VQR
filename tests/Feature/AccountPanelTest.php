@@ -10,6 +10,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleDocument;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -77,8 +78,39 @@ class AccountPanelTest extends TestCase
 
         $this->get($documentUrl)
             ->assertOk()
+            ->assertSee('Visualizador de documento')
+            ->assertSee(route('public.vehicles.documents.file', [$vehicle->public_token, $document]), false);
+
+        $this->get(route('public.vehicles.documents.file', [$vehicle->public_token, $document]))
+            ->assertOk()
             ->assertHeader('Content-Type', 'application/pdf')
             ->assertHeader('Content-Disposition', 'inline; filename="'.basename($document->file_path).'"');
+    }
+
+    public function test_public_document_view_supports_legacy_storage_app_path(): void
+    {
+        [$user, $vehicle, $type] = $this->createLicensedVehicle();
+
+        $relativePath = "vehicle-documents-legacy-test/{$vehicle->id}/revision.pdf";
+        $absolutePath = storage_path("app/{$relativePath}");
+
+        File::ensureDirectoryExists(dirname($absolutePath));
+        File::put($absolutePath, "%PDF-1.4\n% legacy test\n");
+
+        $document = VehicleDocument::create([
+            'vehicle_id' => $vehicle->id,
+            'document_type_id' => $type->id,
+            'expires_at' => now()->addYear()->toDateString(),
+            'status' => 'valid',
+            'file_path' => $relativePath,
+        ]);
+
+        $this->get(route('public.vehicles.documents.file', [$vehicle->public_token, $document]))
+            ->assertOk()
+            ->assertHeader('Content-Type', 'application/pdf')
+            ->assertHeader('Content-Disposition', 'inline; filename="revision.pdf"');
+
+        File::deleteDirectory(storage_path('app/vehicle-documents-legacy-test'));
     }
 
     public function test_account_panel_shows_default_document_uploads_even_without_seeded_document_types(): void
