@@ -63,10 +63,11 @@ jobs:
           DEPLOY_BRANCH: ${{ secrets.DEPLOY_BRANCH || github.ref_name }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           REPOSITORY_TOKEN: ${{ secrets.REPOSITORY_TOKEN }}
+          COMPOSER_BIN: ${{ secrets.COMPOSER_BIN }}
         run: |
           set -euo pipefail
 
-          ssh deploy-host "DEPLOY_PATH='$DEPLOY_PATH' DEPLOY_BRANCH='$DEPLOY_BRANCH' GITHUB_REPOSITORY='$GITHUB_REPOSITORY' REPOSITORY_TOKEN='$REPOSITORY_TOKEN' bash -s" <<'EOF'
+          ssh deploy-host "DEPLOY_PATH='$DEPLOY_PATH' DEPLOY_BRANCH='$DEPLOY_BRANCH' GITHUB_REPOSITORY='$GITHUB_REPOSITORY' REPOSITORY_TOKEN='$REPOSITORY_TOKEN' COMPOSER_BIN='${COMPOSER_BIN:-composer}' bash -s" <<'EOF'
           set -euo pipefail
 
           if [ -n "${REPOSITORY_TOKEN:-}" ]; then
@@ -105,7 +106,8 @@ jobs:
           git pull --ff-only origin "$DEPLOY_BRANCH"
           git remote set-url origin "git@github.com:${GITHUB_REPOSITORY}.git"
 
-          composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+          echo "Using Composer command: $COMPOSER_BIN"
+          eval "$COMPOSER_BIN install --no-dev --no-interaction --prefer-dist --optimize-autoloader"
 
           php artisan migrate --force
           php artisan config:cache

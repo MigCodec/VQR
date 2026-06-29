@@ -14,6 +14,7 @@ Configurar en `Settings > Secrets and variables > Actions`:
 - `DEPLOY_PATH`: carpeta exacta del proyecto en el servidor, por ejemplo `/var/www/vqr`.
 - `DEPLOY_BRANCH`: rama a desplegar, por ejemplo `main`. Si se omite, usa la rama que disparo el workflow.
 - `REPOSITORY_TOKEN`: token de GitHub con permiso de lectura al repositorio privado. Es opcional si el servidor ya usa deploy key SSH.
+- `COMPOSER_BIN`: ruta o comando de Composer en el servidor. Si no se define, usa `composer`.
 
 La llave privada de `SSH_PRIVATE_KEY` debe corresponder a una llave cuya publica este en `~/.ssh/authorized_keys` del usuario `SSH_USER` en el servidor. Si esa llave fue creada desde cPanel y tiene clave, guardar esa clave en `SSH_PRIVATE_KEY_PASSPHRASE`.
 
@@ -23,6 +24,38 @@ Esta llave no es la misma que la deploy key de GitHub. Se usan dos llaves:
 - Servidor -> GitHub: deploy key instalada en el servidor y publica registrada en GitHub.
 
 Si prefieres no configurar deploy key para que el servidor lea GitHub, puedes usar `REPOSITORY_TOKEN`. En ese caso el workflow hace clone/fetch/pull por HTTPS con token y luego deja el remote apuntando a SSH.
+
+## Composer en cPanel
+
+Si el servidor no encuentra `composer`, define el secret `COMPOSER_BIN`.
+
+Ejemplos comunes:
+
+```text
+COMPOSER_BIN=composer
+COMPOSER_BIN=/opt/cpanel/composer/bin/composer
+COMPOSER_BIN=/usr/local/bin/composer
+COMPOSER_BIN=php /home/usuario/composer.phar
+```
+
+Ejemplo para el servidor actual:
+
+```text
+COMPOSER_BIN=php /home/itmanagm/composer.phar
+```
+
+Puedes probar la ruta entrando por SSH:
+
+```bash
+which composer
+composer --version
+```
+
+Si usas un `.phar`:
+
+```bash
+php /home/usuario/composer.phar --version
+```
 
 ## Preparar acceso del servidor al repo privado
 
