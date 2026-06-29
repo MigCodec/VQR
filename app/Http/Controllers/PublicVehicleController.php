@@ -32,12 +32,11 @@ class PublicVehicleController extends Controller
     {
         $vehicle = $this->authorizedVehicleForDocument($publicToken, $document);
 
-        abort_unless($this->resolveDocumentPath($document), 404);
-
         return view('public.document-viewer', [
             'vehicle' => $vehicle,
             'document' => $document->loadMissing('type'),
             'fileUrl' => route('public.vehicles.documents.file', [$vehicle->public_token, $document]),
+            'fileExists' => $this->resolveDocumentPath($document) !== null,
         ]);
     }
 
@@ -101,19 +100,49 @@ class PublicVehicleController extends Controller
             }
         }
 
-        foreach ([
-            storage_path('app/private/'.$relativePath),
-            storage_path('app/'.$relativePath),
-            storage_path('app/public/'.$relativePath),
-        ] as $candidatePath) {
+        foreach ($this->documentPathCandidates($relativePath) as $candidatePath) {
             $realPath = realpath($candidatePath);
 
-            if ($realPath && is_file($realPath) && str_starts_with($realPath, storage_path('app'))) {
+            if ($realPath && is_file($realPath) && $this->isAllowedDocumentPath($realPath)) {
                 return $realPath;
             }
         }
 
         return null;
+    }
+
+    /**
+     * Support old file_path values produced before the private disk was fixed.
+     */
+    private function documentPathCandidates(string $relativePath): array
+    {
+        $pathVariants = array_values(array_unique(array_filter([
+            $relativePath,
+            preg_replace('#^(app/)?private/#', '', $relativePath),
+            preg_replace('#^(app/)?public/#', '', $relativePath),
+            preg_replace('#^(public/)?storage/#', '', $relativePath),
+        ])));
+
+        $candidatePaths = [];
+
+        foreach ($pathVariants as $path) {
+            $candidatePaths[] = storage_path('app/private/'.$path);
+            $candidatePaths[] = storage_path('app/'.$path);
+            $candidatePaths[] = storage_path('app/public/'.$path);
+            $candidatePaths[] = public_path('storage/'.$path);
+        }
+
+        if (str_starts_with($relativePath, storage_path())) {
+            $candidatePaths[] = $relativePath;
+        }
+
+        return array_values(array_unique($candidatePaths));
+    }
+
+    private function isAllowedDocumentPath(string $realPath): bool
+    {
+        return str_starts_with($realPath, storage_path('app'))
+            || str_starts_with($realPath, public_path('storage'));
     }
 
     private function documentMimeType(string $absolutePath): string

@@ -950,6 +950,25 @@ button {
     background: var(--vqr-white);
 }
 
+.document-viewer-empty {
+    display: grid;
+    min-height: 70vh;
+    align-content: center;
+    justify-items: center;
+    padding: 24px;
+    text-align: center;
+}
+
+.document-viewer-empty h2 {
+    margin: 0;
+}
+
+.document-viewer-empty p {
+    max-width: 460px;
+    margin: 10px 0 0;
+    color: var(--vqr-muted);
+}
+
 .billing-total {
     margin-top: 24px;
     padding: 20px;

@@ -24,12 +24,21 @@
                         @endif
                     </p>
                 </div>
-                <a href="{{ $fileUrl }}" class="btn btn-outline" target="_blank" rel="noopener">Abrir archivo</a>
+                @if ($fileExists)
+                    <a href="{{ $fileUrl }}" class="btn btn-outline" target="_blank" rel="noopener">Abrir archivo</a>
+                @endif
             </div>
         </header>
 
         <section class="document-viewer-panel">
-            <iframe src="{{ $fileUrl }}" title="Visualizador de documento {{ $document->type?->name ?? '' }}"></iframe>
+            @if ($fileExists)
+                <iframe src="{{ $fileUrl }}" title="Visualizador de documento {{ $document->type?->name ?? '' }}"></iframe>
+            @else
+                <div class="document-viewer-empty">
+                    <h2>Archivo no disponible</h2>
+                    <p>El documento existe en VQR, pero el archivo no fue encontrado en el almacenamiento del servidor.</p>
+                </div>
+            @endif
         </section>
     </main>
 </x-layouts.app>

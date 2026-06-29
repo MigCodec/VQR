@@ -113,6 +113,36 @@ class AccountPanelTest extends TestCase
         File::deleteDirectory(storage_path('app/vehicle-documents-legacy-test'));
     }
 
+    public function test_public_document_view_supports_private_prefixed_path(): void
+    {
+        [$user, $vehicle, $type] = $this->createLicensedVehicle();
+
+        $relativePath = "vehicle-documents-private-prefix-test/{$vehicle->id}/revision.pdf";
+        $absolutePath = storage_path("app/private/{$relativePath}");
+
+        File::ensureDirectoryExists(dirname($absolutePath));
+        File::put($absolutePath, "%PDF-1.4\n% private prefix test\n");
+
+        $document = VehicleDocument::create([
+            'vehicle_id' => $vehicle->id,
+            'document_type_id' => $type->id,
+            'expires_at' => now()->addYear()->toDateString(),
+            'status' => 'valid',
+            'file_path' => 'private/'.$relativePath,
+        ]);
+
+        $this->get(route('public.vehicles.documents.show', [$vehicle->public_token, $document]))
+            ->assertOk()
+            ->assertSee('Visualizador de documento');
+
+        $this->get(route('public.vehicles.documents.file', [$vehicle->public_token, $document]))
+            ->assertOk()
+            ->assertHeader('Content-Type', 'application/pdf')
+            ->assertHeader('Content-Disposition', 'inline; filename="revision.pdf"');
+
+        File::deleteDirectory(storage_path('app/private/vehicle-documents-private-prefix-test'));
+    }
+
     public function test_account_panel_shows_default_document_uploads_even_without_seeded_document_types(): void
     {
         [$user, $vehicle] = $this->createLicensedVehicle(withDocumentType: false);
