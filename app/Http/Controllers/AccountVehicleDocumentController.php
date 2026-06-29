@@ -34,15 +34,16 @@ class AccountVehicleDocumentController extends Controller
             'document' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png,webp', 'max:10240'],
         ]);
 
-        $path = $request->file('document')->store("vehicle-documents/{$vehicle->id}");
+        $disk = Storage::disk('local');
+        $path = $request->file('document')->store("vehicle-documents/{$vehicle->id}", 'local');
 
         $existing = VehicleDocument::query()
             ->where('vehicle_id', $vehicle->id)
             ->where('document_type_id', $documentType->id)
             ->first();
 
-        if ($existing?->file_path && Storage::exists($existing->file_path)) {
-            Storage::delete($existing->file_path);
+        if ($existing?->file_path && $disk->exists($existing->file_path)) {
+            $disk->delete($existing->file_path);
         }
 
         VehicleDocument::updateOrCreate([

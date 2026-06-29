@@ -65,11 +65,14 @@ class VehicleDocument extends Model
             return $this->status;
         }
 
-        if ($this->expires_at->isPast()) {
+        $today = now()->startOfDay();
+        $expiresAt = $this->expires_at->copy()->startOfDay();
+
+        if ($expiresAt->lt($today)) {
             return 'expired';
         }
 
-        if ($this->expires_at->diffInDays(now()) <= 30) {
+        if ($today->diffInDays($expiresAt) <= 30) {
             return 'expiring_soon';
         }
 

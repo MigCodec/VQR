@@ -30,6 +30,8 @@ class PublicVehicleController extends Controller
 
     public function document(string $publicToken, VehicleDocument $document)
     {
+        $disk = Storage::disk('local');
+
         $vehicle = Vehicle::query()
             ->where('public_token', $publicToken)
             ->where('status', 'active')
@@ -44,9 +46,17 @@ class PublicVehicleController extends Controller
             ], 402);
         }
 
-        abort_unless($document->file_path && Storage::exists($document->file_path), 404);
+        abort_unless($document->file_path && $disk->exists($document->file_path), 404);
 
-        return Storage::response($document->file_path);
+        $fileName = basename($document->file_path);
+        $mimeType = $disk->mimeType($document->file_path) ?: 'application/octet-stream';
+
+        return response()->file($disk->path($document->file_path), [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => 'inline; filename="'.$fileName.'"',
+            'Cache-Control' => 'private, max-age=300',
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
     }
 
     private function hasActiveSubscribedUser(Vehicle $vehicle): bool

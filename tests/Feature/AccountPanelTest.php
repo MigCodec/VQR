@@ -75,7 +75,10 @@ class AccountPanelTest extends TestCase
         $this->assertStringContainsString($document->public_token, $documentUrl);
         $this->assertStringNotContainsString('/documents/'.$document->id, $documentUrl);
 
-        $this->get($documentUrl)->assertOk();
+        $this->get($documentUrl)
+            ->assertOk()
+            ->assertHeader('Content-Type', 'application/pdf')
+            ->assertHeader('Content-Disposition', 'inline; filename="'.basename($document->file_path).'"');
     }
 
     public function test_account_panel_shows_default_document_uploads_even_without_seeded_document_types(): void
