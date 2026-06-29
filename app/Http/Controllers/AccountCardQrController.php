@@ -25,11 +25,13 @@ class AccountCardQrController extends Controller
             new SvgImageBackEnd
         );
 
-        $svg = (new Writer($renderer))->writeString($card->public_url);
+        $publicUrl = rtrim((string) config('app.url'), '/')."/t/{$card->short_code}";
+        $svg = (new Writer($renderer))->writeString($publicUrl);
 
         return response($svg, 200, [
             'Content-Type' => 'image/svg+xml; charset=UTF-8',
             'Cache-Control' => 'private, max-age=3600',
+            'Content-Disposition' => 'inline; filename="vqr-'.$card->short_code.'.svg"',
         ]);
     }
 }

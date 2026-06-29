@@ -48,7 +48,7 @@ class Card extends Model
 
     public function getPublicUrlAttribute(): string
     {
-        return url("/t/{$this->short_code}");
+        return rtrim((string) config('app.url'), '/')."/t/{$this->short_code}";
     }
 
     public function getTypeLabelAttribute(): string
