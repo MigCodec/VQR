@@ -25,13 +25,19 @@
                     </p>
                 </div>
                 @if ($fileExists)
-                    <a href="{{ $fileUrl }}" class="btn btn-outline" target="_blank" rel="noopener">Abrir archivo</a>
+                    <div class="document-viewer-actions">
+                        <a href="{{ route('public.vehicles.show', $vehicle->public_token) }}" class="btn btn-outline">Volver</a>
+                        <a href="{{ $fileUrl }}" class="btn btn-primary" target="_blank" rel="noopener">Abrir archivo</a>
+                    </div>
                 @endif
             </div>
         </header>
 
         <section class="document-viewer-panel">
             @if ($fileExists)
+                <div class="document-viewer-mobile-note">
+                    Si tu navegador no muestra el PDF completo, abre el archivo en una pestaña nueva.
+                </div>
                 <iframe src="{{ $fileUrl }}" title="Visualizador de documento {{ $document->type?->name ?? '' }}"></iframe>
             @else
                 <div class="document-viewer-empty">
