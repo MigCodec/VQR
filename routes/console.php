@@ -4,6 +4,8 @@ use App\Models\DocumentType;
 use App\Models\Payment;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Models\Vehicle;
+use App\Models\VehicleDocument;
 use App\Services\MercadoPagoService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -86,6 +88,42 @@ Artisan::command('vqr:install-defaults', function () {
 
     return self::SUCCESS;
 })->purpose('Install required VQR default data');
+
+Artisan::command('vqr:diagnose-document-url {vehicleToken} {documentToken}', function (string $vehicleToken, string $documentToken) {
+    $vehicle = Vehicle::query()
+        ->where('public_token', $vehicleToken)
+        ->with('activeUsers.activeSubscription')
+        ->first();
+
+    $document = VehicleDocument::query()
+        ->where('public_token', $documentToken)
+        ->first();
+
+    $this->line('Vehicle: '.($vehicle ? "FOUND id={$vehicle->id} status={$vehicle->status}" : 'MISSING'));
+    $this->line('Document: '.($document ? "FOUND id={$document->id} vehicle_id={$document->vehicle_id}" : 'MISSING'));
+
+    if (! $vehicle || ! $document) {
+        return self::FAILURE;
+    }
+
+    $this->line('Relation: '.($document->vehicle_id === $vehicle->id ? 'OK' : 'MISMATCH'));
+    $this->line('Subscribed owner: '.($vehicle->activeUsers->contains(fn ($user) => $user->hasActiveSubscription()) ? 'YES' : 'NO'));
+    $this->line('file_path: '.($document->file_path ?: 'NULL'));
+
+    $relativePath = ltrim(str_replace('\\', '/', (string) $document->file_path), '/');
+    $paths = [
+        storage_path('app/private/'.$relativePath),
+        storage_path('app/'.$relativePath),
+        storage_path('app/public/'.$relativePath),
+        public_path('storage/'.$relativePath),
+    ];
+
+    foreach ($paths as $path) {
+        $this->line((is_file($path) ? 'FOUND ' : 'MISS  ').$path);
+    }
+
+    return self::SUCCESS;
+})->purpose('Diagnose why a public VQR document URL is not resolving');
 
 Artisan::command('vqr:sync-pending-payments {--limit=50 : Maximum payments to sync in one run}', function (MercadoPagoService $mercadoPago) {
     $limit = max(1, (int) $this->option('limit'));

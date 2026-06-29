@@ -28,20 +28,23 @@ class PublicVehicleController extends Controller
         ]);
     }
 
-    public function document(string $publicToken, VehicleDocument $document)
+    public function document(string $publicToken, string $documentToken)
     {
+        $document = $this->findDocumentByToken($documentToken);
         $vehicle = $this->authorizedVehicleForDocument($publicToken, $document);
 
         return view('public.document-viewer', [
             'vehicle' => $vehicle,
             'document' => $document->loadMissing('type'),
-            'fileUrl' => route('public.vehicles.documents.file', [$vehicle->public_token, $document]),
+            'fileUrl' => route('public.vehicles.documents.file', [$vehicle->public_token, $document->public_token]),
             'fileExists' => $this->resolveDocumentPath($document) !== null,
         ]);
     }
 
-    public function documentFile(string $publicToken, VehicleDocument $document)
+    public function documentFile(string $publicToken, string $documentToken)
     {
+        $document = $this->findDocumentByToken($documentToken);
+
         $this->authorizedVehicleForDocument($publicToken, $document);
 
         $absolutePath = $this->resolveDocumentPath($document);
@@ -76,6 +79,13 @@ class PublicVehicleController extends Controller
         }
 
         return $vehicle;
+    }
+
+    private function findDocumentByToken(string $documentToken): VehicleDocument
+    {
+        return VehicleDocument::query()
+            ->where('public_token', $documentToken)
+            ->firstOrFail();
     }
 
     private function hasActiveSubscribedUser(Vehicle $vehicle): bool

@@ -71,7 +71,7 @@ class AccountPanelTest extends TestCase
         $this->assertNotNull($document->public_token);
         Storage::disk('local')->assertExists($document->file_path);
 
-        $documentUrl = route('public.vehicles.documents.show', [$vehicle->public_token, $document]);
+        $documentUrl = route('public.vehicles.documents.show', [$vehicle->public_token, $document->public_token]);
 
         $this->assertStringContainsString($document->public_token, $documentUrl);
         $this->assertStringNotContainsString('/documents/'.$document->id, $documentUrl);
@@ -79,9 +79,9 @@ class AccountPanelTest extends TestCase
         $this->get($documentUrl)
             ->assertOk()
             ->assertSee('Visualizador de documento')
-            ->assertSee(route('public.vehicles.documents.file', [$vehicle->public_token, $document]), false);
+            ->assertSee(route('public.vehicles.documents.file', [$vehicle->public_token, $document->public_token]), false);
 
-        $this->get(route('public.vehicles.documents.file', [$vehicle->public_token, $document]))
+        $this->get(route('public.vehicles.documents.file', [$vehicle->public_token, $document->public_token]))
             ->assertOk()
             ->assertHeader('Content-Type', 'application/pdf')
             ->assertHeader('Content-Disposition', 'inline; filename="'.basename($document->file_path).'"');
@@ -105,7 +105,7 @@ class AccountPanelTest extends TestCase
             'file_path' => $relativePath,
         ]);
 
-        $this->get(route('public.vehicles.documents.file', [$vehicle->public_token, $document]))
+        $this->get(route('public.vehicles.documents.file', [$vehicle->public_token, $document->public_token]))
             ->assertOk()
             ->assertHeader('Content-Type', 'application/pdf')
             ->assertHeader('Content-Disposition', 'inline; filename="revision.pdf"');
@@ -131,11 +131,11 @@ class AccountPanelTest extends TestCase
             'file_path' => 'private/'.$relativePath,
         ]);
 
-        $this->get(route('public.vehicles.documents.show', [$vehicle->public_token, $document]))
+        $this->get(route('public.vehicles.documents.show', [$vehicle->public_token, $document->public_token]))
             ->assertOk()
             ->assertSee('Visualizador de documento');
 
-        $this->get(route('public.vehicles.documents.file', [$vehicle->public_token, $document]))
+        $this->get(route('public.vehicles.documents.file', [$vehicle->public_token, $document->public_token]))
             ->assertOk()
             ->assertHeader('Content-Type', 'application/pdf')
             ->assertHeader('Content-Disposition', 'inline; filename="revision.pdf"');
