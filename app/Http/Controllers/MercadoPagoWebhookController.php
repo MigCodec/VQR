@@ -20,7 +20,11 @@ class MercadoPagoWebhookController extends Controller
             ?? $request->query('data_id')
             ?? $request->query('id');
 
-        if ($paymentId) {
+        $type = $request->input('type') ?? $request->query('topic');
+
+        if ($paymentId && $type === 'merchant_order') {
+            $mercadoPago->syncMerchantOrder((string) $paymentId);
+        } elseif ($paymentId) {
             $mercadoPago->syncPayment((string) $paymentId);
         }
 

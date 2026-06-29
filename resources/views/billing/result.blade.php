@@ -6,7 +6,7 @@
             <h1 class="page-title">{{ $title }}</h1>
             <p class="section-text">{{ $message }}</p>
             <div class="action-row">
-                <a href="{{ route('billing.show') }}" class="btn btn-navy">Volver a cuenta</a>
+                <a href="{{ $actionRoute ?? route('account.show') }}" class="btn btn-navy">{{ $actionLabel ?? 'Ir a mi cuenta' }}</a>
             </div>
         </section>
     </main>

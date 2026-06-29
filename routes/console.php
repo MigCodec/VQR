@@ -1,9 +1,12 @@
 <?php
 
+use App\Models\Payment;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Services\MercadoPagoService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -74,3 +77,44 @@ Artisan::command('vqr:grant-admin {email : User email} {--revoke : Remove admin 
 
     return self::SUCCESS;
 })->purpose('Grant or revoke VQR admin permission for a user by email');
+
+Artisan::command('vqr:sync-pending-payments {--limit=50 : Maximum payments to sync in one run}', function (MercadoPagoService $mercadoPago) {
+    $limit = max(1, (int) $this->option('limit'));
+
+    $payments = Payment::query()
+        ->where('provider', 'mercado_pago')
+        ->whereNull('subscription_id')
+        ->where(function ($query): void {
+            $query->whereNotNull('provider_payment_id')
+                ->orWhereNotNull('provider_preference_id');
+        })
+        ->whereIn('status', ['pending', 'in_process', 'authorized', 'unknown'])
+        ->oldest()
+        ->limit($limit)
+        ->get();
+
+    $activated = 0;
+
+    foreach ($payments as $payment) {
+        $synced = $payment->provider_payment_id
+            ? $mercadoPago->syncPayment($payment->provider_payment_id)
+            : null;
+
+        if (! $synced?->subscription_id && $payment->provider_preference_id) {
+            $mercadoPago->syncPreferencePayments($payment->provider_preference_id);
+            $synced = $payment->fresh();
+        }
+
+        if ($synced?->subscription_id) {
+            $activated++;
+        }
+    }
+
+    $this->info("Synced {$payments->count()} Mercado Pago payment(s). Activated {$activated} license(s).");
+
+    return self::SUCCESS;
+})->purpose('Sync pending Mercado Pago payments and activate approved licenses');
+
+Schedule::command('vqr:sync-pending-payments')
+    ->everyFiveMinutes()
+    ->withoutOverlapping();

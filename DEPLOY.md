@@ -130,3 +130,19 @@ Durante el deploy ejecuta:
 - `php artisan migrate --force`
 - cache de config, rutas y vistas
 - `php artisan up`
+
+## Scheduler de Laravel
+
+VQR usa scheduler para sincronizar pagos pendientes de Mercado Pago cada 5 minutos:
+
+```bash
+php artisan vqr:sync-pending-payments
+```
+
+En produccion debes configurar un cron cada minuto apuntando al proyecto:
+
+```cron
+* * * * * cd /ruta/al/proyecto && php artisan schedule:run >> /dev/null 2>&1
+```
+
+En cPanel esto se configura en **Cron Jobs**. Cambia `/ruta/al/proyecto` por el `DEPLOY_PATH` real.

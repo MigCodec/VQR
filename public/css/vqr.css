@@ -1035,6 +1035,16 @@ button {
     margin-top: 18px;
 }
 
+.document-section-head {
+    margin-top: 18px;
+    border-top: 1px solid var(--vqr-border);
+    padding-top: 16px;
+}
+
+.document-section-head h3 {
+    margin: 0;
+}
+
 .document-upload-card {
     border: 1px solid var(--vqr-border);
     border-radius: 8px;
@@ -1083,6 +1093,13 @@ button {
 .vehicle-form {
     display: grid;
     gap: 12px;
+}
+
+.mobile-action-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
 }
 
 .admin-section {
@@ -1290,6 +1307,17 @@ button {
 
     .hero-points span {
         width: 100%;
+    }
+
+    .mobile-action-row .btn,
+    .vehicle-panel-head .btn,
+    .upload-form .btn,
+    .vehicle-form .btn {
+        width: 100%;
+    }
+
+    .document-upload-card {
+        padding: 14px;
     }
 
     .vqr-card-real {

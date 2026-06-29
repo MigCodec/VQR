@@ -28,14 +28,31 @@ class BillingController extends Controller
 
     public function success(Request $request, MercadoPagoService $mercadoPago)
     {
-        if ($request->filled('payment_id')) {
-            $mercadoPago->syncPayment((string) $request->query('payment_id'));
+        $paymentId = $this->validMercadoPagoId($request->query('payment_id'))
+            ?? $this->validMercadoPagoId($request->query('collection_id'));
+        $merchantOrderId = $this->validMercadoPagoId($request->query('merchant_order_id'));
+        $preferenceId = $this->validMercadoPagoId($request->query('preference_id'));
+
+        if ($paymentId) {
+            $mercadoPago->syncPayment($paymentId);
+        } elseif ($merchantOrderId) {
+            $mercadoPago->syncMerchantOrder($merchantOrderId);
+        } elseif ($preferenceId) {
+            $mercadoPago->syncPreferencePayments($preferenceId);
+        }
+
+        if (Auth::check() && Auth::user()->fresh()->hasActiveSubscription()) {
+            return redirect()
+                ->route('account.show')
+                ->with('status', 'Pago confirmado. Tu licencia VQR ya esta activa.');
         }
 
         return view('billing.result', [
             'status' => 'success',
             'title' => 'Pago recibido',
-            'message' => 'Estamos confirmando tu pago. Si fue aprobado, tu cuenta quedará activa automáticamente.',
+            'message' => 'Estamos confirmando tu pago. Si fue aprobado, tu cuenta quedara activa automaticamente.',
+            'actionRoute' => route('account.show'),
+            'actionLabel' => 'Ir a mi cuenta',
         ]);
     }
 
@@ -45,6 +62,8 @@ class BillingController extends Controller
             'status' => 'failure',
             'title' => 'Pago no completado',
             'message' => 'No se pudo completar el pago. Puedes volver a intentarlo cuando quieras.',
+            'actionRoute' => route('billing.show'),
+            'actionLabel' => 'Volver a planes',
         ]);
     }
 
@@ -53,7 +72,24 @@ class BillingController extends Controller
         return view('billing.result', [
             'status' => 'pending',
             'title' => 'Pago pendiente',
-            'message' => 'Tu pago quedó pendiente. La cuenta se activará cuando Mercado Pago confirme la aprobación.',
+            'message' => 'Tu pago quedo pendiente. La cuenta se activara cuando Mercado Pago confirme la aprobacion.',
+            'actionRoute' => route('account.show'),
+            'actionLabel' => 'Ir a mi cuenta',
         ]);
+    }
+
+    private function validMercadoPagoId(mixed $value): ?string
+    {
+        if (! is_scalar($value)) {
+            return null;
+        }
+
+        $value = trim((string) $value);
+
+        if ($value === '' || strtolower($value) === 'null') {
+            return null;
+        }
+
+        return $value;
     }
 }

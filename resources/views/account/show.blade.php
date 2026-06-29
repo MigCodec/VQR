@@ -40,6 +40,11 @@
                 <p class="section-text">
                     Usas {{ $vehicleCount }} de {{ $vehicleLimit }} cupos de tu licencia {{ $subscription?->plan === 'premium' ? 'Premium' : 'Normal' }}.
                 </p>
+                @if ($vehicleCount > 0)
+                    <div class="mobile-action-row">
+                        <a href="#documentos" class="btn btn-primary">Subir documentos</a>
+                    </div>
+                @endif
                 <div class="card-link-box account-card-box">
                     <div class="account-vqr-card-wrap">
                         <div class="vqr-card-real account-vqr-card">
@@ -117,7 +122,7 @@
             @endif
         </section>
 
-        <section class="account-grid">
+        <section class="account-grid" id="documentos">
             @forelse ($vehicles as $vehicle)
                 @php
                     $documentsByType = $vehicle->documents->keyBy('document_type_id');
@@ -131,6 +136,13 @@
                             <p class="vehicle-meta">{{ $vehicle->display_name }} @if($vehicle->year) - {{ $vehicle->year }} @endif</p>
                         </div>
                         <a class="btn btn-outline" href="{{ route('public.vehicles.show', $vehicle->public_token) }}">Vista publica</a>
+                    </div>
+
+                    <div class="document-section-head">
+                        <div>
+                            <h3>Documentos requeridos</h3>
+                            <p class="muted-small">Sube o reemplaza revision tecnica, SOAP y permiso de circulacion.</p>
+                        </div>
                     </div>
 
                     <div class="document-upload-grid">

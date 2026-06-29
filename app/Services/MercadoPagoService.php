@@ -54,6 +54,7 @@ class MercadoPagoService
                     'failure' => route('billing.mercado-pago.failure'),
                     'pending' => route('billing.mercado-pago.pending'),
                 ],
+                'statement_descriptor' => 'VQR',
                 'auto_return' => 'approved',
                 'external_reference' => (string) $payment->id,
                 'notification_url' => route('webhooks.mercado-pago'),
@@ -92,11 +93,14 @@ class MercadoPagoService
         }
 
         $payload = $response->json();
-        $externalReference = $payload['external_reference'] ?? null;
+        $externalReference = $payload['external_reference']
+            ?? data_get($payload, 'metadata.payment_id');
 
-        $payment = Payment::query()
-            ->when($externalReference, fn ($query) => $query->whereKey($externalReference))
-            ->first();
+        if (! $externalReference) {
+            return null;
+        }
+
+        $payment = Payment::query()->whereKey($externalReference)->first();
 
         if (! $payment) {
             return null;
@@ -120,6 +124,44 @@ class MercadoPagoService
         });
 
         return $payment->fresh();
+    }
+
+    public function syncMerchantOrder(string $merchantOrderId): int
+    {
+        $response = $this->client()->get("/merchant_orders/{$merchantOrderId}");
+
+        if (! $response->successful()) {
+            return 0;
+        }
+
+        return $this->syncMerchantOrderPayments($response->json());
+    }
+
+    public function syncPreferencePayments(string $preferenceId): int
+    {
+        $response = $this->client()->get('/merchant_orders/search', [
+            'preference_id' => $preferenceId,
+        ]);
+
+        if (! $response->successful()) {
+            return 0;
+        }
+
+        return collect($response->json('elements', []))
+            ->sum(fn (array $merchantOrder): int => $this->syncMerchantOrderPayments($merchantOrder));
+    }
+
+    private function syncMerchantOrderPayments(array $merchantOrder): int
+    {
+        return collect($merchantOrder['payments'] ?? [])
+            ->pluck('id')
+            ->filter()
+            ->unique()
+            ->sum(function ($providerPaymentId): int {
+                $payment = $this->syncPayment((string) $providerPaymentId);
+
+                return $payment?->subscription_id ? 1 : 0;
+            });
     }
 
     public function activateSubscription(Payment $payment): Subscription
