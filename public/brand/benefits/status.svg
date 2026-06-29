@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" role="img" aria-labelledby="title">
+  <title id="title">Estado y vencimientos</title>
+  <rect width="320" height="200" rx="18" fill="#f7fbff"/>
+  <rect x="54" y="44" width="212" height="126" rx="14" fill="#ffffff" stroke="#c9d7e8" stroke-width="4"/>
+  <path d="M84 82h74M84 114h54M84 146h88" stroke="#0b2749" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="220" cy="104" r="34" fill="#e9f5ff" stroke="#078dd8" stroke-width="8"/>
+  <path d="M220 86v21l15 10" fill="none" stroke="#078dd8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M190 148h60" stroke="#078dd8" stroke-width="10" stroke-linecap="round"/>
+</svg>

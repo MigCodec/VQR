@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" role="img" aria-labelledby="title">
+  <title id="title">Acceso desde celular</title>
+  <rect width="320" height="200" rx="18" fill="#f7fbff"/>
+  <rect x="108" y="28" width="104" height="152" rx="18" fill="#0b2749"/>
+  <rect x="122" y="48" width="76" height="106" rx="8" fill="#ffffff"/>
+  <circle cx="160" cy="166" r="5" fill="#e9f5ff"/>
+  <path d="M143 79h34M143 101h34M143 123h22" stroke="#078dd8" stroke-width="8" stroke-linecap="round"/>
+  <path d="M222 78c16 16 16 43 0 59M236 63c25 25 25 66 0 91" fill="none" stroke="#078dd8" stroke-width="8" stroke-linecap="round"/>
+</svg>

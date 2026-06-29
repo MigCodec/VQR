@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" role="img" aria-labelledby="title">
+  <title id="title">Control vehicular</title>
+  <rect width="320" height="200" rx="18" fill="#f7fbff"/>
+  <path d="M54 129l18-36c5-10 15-16 26-16h82c12 0 23 7 28 18l15 34" fill="#0b2749"/>
+  <path d="M72 128h157v34H72z" fill="#0b2749"/>
+  <path d="M96 87h78c9 0 17 5 22 13l8 15H76l10-18c2-6 5-10 10-10z" fill="#ffffff"/>
+  <circle cx="102" cy="164" r="17" fill="#071b33"/>
+  <circle cx="204" cy="164" r="17" fill="#071b33"/>
+  <rect x="238" y="54" width="38" height="108" rx="8" fill="#078dd8"/>
+  <path d="M257 66v84" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M252 104h-28" stroke="#078dd8" stroke-width="8" stroke-linecap="round"/>
+</svg>

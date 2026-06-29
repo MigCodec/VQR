@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" role="img" aria-labelledby="title">
+  <title id="title">Documentos organizados</title>
+  <rect width="320" height="200" rx="18" fill="#f7fbff"/>
+  <rect x="80" y="34" width="130" height="144" rx="10" fill="#ffffff" stroke="#c9d7e8" stroke-width="4"/>
+  <path d="M180 34v38h30" fill="#e9f5ff" stroke="#c9d7e8" stroke-width="4"/>
+  <path d="M105 84h78M105 110h78M105 136h52" stroke="#0b2749" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="226" cy="136" r="34" fill="#078dd8"/>
+  <path d="M211 136l10 10 21-24" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

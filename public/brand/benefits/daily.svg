@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" role="img" aria-labelledby="title">
+  <title id="title">Uso diario</title>
+  <rect width="320" height="200" rx="18" fill="#f7fbff"/>
+  <path d="M52 140h216" stroke="#c9d7e8" stroke-width="8" stroke-linecap="round"/>
+  <path d="M82 126l16-32c4-9 13-14 23-14h72c10 0 19 6 23 15l14 31" fill="#0b2749"/>
+  <rect x="72" y="121" width="170" height="36" rx="8" fill="#0b2749"/>
+  <path d="M112 91h72c8 0 15 4 18 11l7 13H94l9-17c2-4 5-7 9-7z" fill="#ffffff"/>
+  <circle cx="111" cy="158" r="16" fill="#071b33"/>
+  <circle cx="204" cy="158" r="16" fill="#071b33"/>
+  <circle cx="248" cy="62" r="22" fill="#078dd8"/>
+  <path d="M248 50v14h11" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

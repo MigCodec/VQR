@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" role="img" aria-labelledby="title">
+  <title id="title">Tarjeta VQR con NFC y QR</title>
+  <rect width="320" height="200" rx="18" fill="#f7fbff"/>
+  <rect x="38" y="48" width="244" height="124" rx="14" fill="#ffffff" stroke="#c9d7e8" stroke-width="4"/>
+  <path d="M68 78h88M68 104h62M68 130h94" stroke="#0b2749" stroke-width="10" stroke-linecap="round"/>
+  <path d="M209 72h46v46h-46zM221 84h22v22h-22zM209 135h14v14h-14zM240 135h15v15h-15zM230 120h14v14h-14zM256 120h10v10h-10z" fill="#078dd8"/>
+  <path d="M186 82c18 18 18 47 0 65M171 96c10 10 10 27 0 37" fill="none" stroke="#0b2749" stroke-width="8" stroke-linecap="round"/>
+</svg>
