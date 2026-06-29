@@ -11,6 +11,7 @@ use App\Http\Controllers\BillingController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\MercadoPagoWebhookController;
 use App\Http\Controllers\PublicCardController;
+use App\Http\Controllers\PublicCardQrController;
 use App\Http\Controllers\PublicVehicleController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,5 +37,6 @@ Route::post('/admin/cards/{card}/attach', [AdminCardController::class, 'attach']
 Route::post('/admin/cards/{card}/detach', [AdminCardController::class, 'detach'])->name('admin.cards.detach');
 
 Route::get('/t/{shortCode}', [PublicCardController::class, 'show'])->name('public.cards.show');
+Route::get('/t/{shortCode}/qr.svg', [PublicCardQrController::class, 'show'])->name('public.cards.qr');
 Route::get('/v/{publicToken}', [PublicVehicleController::class, 'show'])->name('public.vehicles.show');
 Route::get('/v/{publicToken}/documents/{document:public_token}', [PublicVehicleController::class, 'document'])->name('public.vehicles.documents.show');

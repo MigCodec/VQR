@@ -27,7 +27,7 @@ class AccountPanelTest extends TestCase
             ->assertSee($vehicle->plate)
             ->assertSee('Revision tecnica')
             ->assertSee('Tarjeta de la cuenta')
-            ->assertSee(route('account.cards.qr', $user->cards()->first()), false)
+            ->assertSee(route('public.cards.qr', $user->cards()->first()->short_code), false)
             ->assertSee('Subir documento');
 
         $card = Card::firstOrFail();

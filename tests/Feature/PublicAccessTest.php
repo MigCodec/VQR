@@ -45,6 +45,16 @@ class PublicAccessTest extends TestCase
             ->assertDontSee('Revisión técnica');
     }
 
+    public function test_card_qr_svg_is_public_and_uses_short_code(): void
+    {
+        [$card] = $this->createPublicVehicle(activeSubscription: true);
+
+        $this->get(route('public.cards.qr', $card->short_code))
+            ->assertOk()
+            ->assertHeader('Content-Type', 'image/svg+xml; charset=UTF-8')
+            ->assertSee('<svg', false);
+    }
+
     public function test_card_only_shows_vehicles_with_active_user_relationship(): void
     {
         [$oldCard, $vehicle] = $this->createPublicVehicle(activeSubscription: true);
