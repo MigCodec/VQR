@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\DocumentType;
 use App\Models\Payment;
 use App\Models\Subscription;
 use App\Models\User;
@@ -77,6 +78,14 @@ Artisan::command('vqr:grant-admin {email : User email} {--revoke : Remove admin 
 
     return self::SUCCESS;
 })->purpose('Grant or revoke VQR admin permission for a user by email');
+
+Artisan::command('vqr:install-defaults', function () {
+    DocumentType::ensureRequiredTypes();
+
+    $this->info('VQR default document types are ready.');
+
+    return self::SUCCESS;
+})->purpose('Install required VQR default data');
 
 Artisan::command('vqr:sync-pending-payments {--limit=50 : Maximum payments to sync in one run}', function (MercadoPagoService $mercadoPago) {
     $limit = max(1, (int) $this->option('limit'));

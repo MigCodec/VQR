@@ -25,6 +25,8 @@ class AccountController extends Controller
             ->with(['documents.type'])
             ->get();
 
+        DocumentType::ensureRequiredTypes();
+
         $documentTypes = DocumentType::query()
             ->where('is_required', true)
             ->orderBy('sort_order')

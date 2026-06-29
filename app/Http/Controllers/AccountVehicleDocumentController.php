@@ -13,6 +13,8 @@ class AccountVehicleDocumentController extends Controller
 {
     public function store(Request $request, Vehicle $vehicle, DocumentType $documentType)
     {
+        DocumentType::ensureRequiredTypes();
+
         if (! Auth::check()) {
             return redirect()->route('auth.google.redirect');
         }

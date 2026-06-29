@@ -96,7 +96,7 @@ class GoogleAuthTest extends TestCase
         Subscription::create([
             'user_id' => $existingUser->id,
             'status' => 'active',
-            'amount' => 5000,
+            'amount' => 4990,
             'currency' => 'CLP',
             'starts_at' => now()->subDay(),
             'expires_at' => now()->addYear(),

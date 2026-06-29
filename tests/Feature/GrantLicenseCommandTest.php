@@ -38,7 +38,7 @@ class GrantLicenseCommandTest extends TestCase
         Subscription::create([
             'user_id' => $user->id,
             'status' => 'active',
-            'amount' => 5000,
+            'amount' => 4990,
             'currency' => 'CLP',
             'starts_at' => now()->subMonth(),
             'expires_at' => $currentExpiration,
@@ -73,7 +73,7 @@ class GrantLicenseCommandTest extends TestCase
 
         $this->assertSame('premium', $subscription->plan);
         $this->assertSame(3, $subscription->vehicle_limit);
-        $this->assertSame(10000, $subscription->amount);
+        $this->assertSame(9990, $subscription->amount);
     }
 
     public function test_grants_and_revokes_admin_permission_by_email(): void

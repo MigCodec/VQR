@@ -25,7 +25,7 @@ class AccountPanelTest extends TestCase
             ->get(route('account.show'))
             ->assertOk()
             ->assertSee($vehicle->plate)
-            ->assertSee($type->name)
+            ->assertSee('Revision tecnica')
             ->assertSee('Tarjeta de la cuenta')
             ->assertSee(route('account.cards.qr', $user->cards()->first()), false)
             ->assertSee('Subir documento');
@@ -78,6 +78,20 @@ class AccountPanelTest extends TestCase
         $this->get($documentUrl)->assertOk();
     }
 
+    public function test_account_panel_shows_default_document_uploads_even_without_seeded_document_types(): void
+    {
+        [$user, $vehicle] = $this->createLicensedVehicle(withDocumentType: false);
+
+        $this->actingAs($user)
+            ->get(route('account.show'))
+            ->assertOk()
+            ->assertSee($vehicle->plate)
+            ->assertSee('Revision tecnica')
+            ->assertSee('SOAP')
+            ->assertSee('Permiso de circulacion')
+            ->assertSee('Subir documento');
+    }
+
     public function test_normal_license_can_add_only_one_vehicle(): void
     {
         $user = User::factory()->create();
@@ -86,7 +100,7 @@ class AccountPanelTest extends TestCase
             'status' => 'active',
             'plan' => 'normal',
             'vehicle_limit' => 1,
-            'amount' => 5000,
+            'amount' => 4990,
             'currency' => 'CLP',
             'starts_at' => now()->subDay(),
             'expires_at' => now()->addYear(),
@@ -120,7 +134,7 @@ class AccountPanelTest extends TestCase
             'status' => 'active',
             'plan' => 'premium',
             'vehicle_limit' => 3,
-            'amount' => 10000,
+            'amount' => 9990,
             'currency' => 'CLP',
             'starts_at' => now()->subDay(),
             'expires_at' => now()->addYear(),
@@ -144,7 +158,7 @@ class AccountPanelTest extends TestCase
         $this->assertDatabaseCount('card_vehicle', 0);
     }
 
-    private function createLicensedVehicle(): array
+    private function createLicensedVehicle(bool $withDocumentType = true): array
     {
         $user = User::factory()->create();
         Subscription::create([
@@ -152,7 +166,7 @@ class AccountPanelTest extends TestCase
             'status' => 'active',
             'plan' => 'normal',
             'vehicle_limit' => 1,
-            'amount' => 5000,
+            'amount' => 4990,
             'currency' => 'CLP',
             'starts_at' => now()->subDay(),
             'expires_at' => now()->addYear(),
@@ -171,12 +185,16 @@ class AccountPanelTest extends TestCase
             'is_primary' => true,
         ]);
 
-        $type = DocumentType::create([
-            'name' => 'Revisión técnica',
-            'slug' => 'revision-tecnica',
-            'is_required' => true,
-            'sort_order' => 10,
-        ]);
+        $type = null;
+
+        if ($withDocumentType) {
+            $type = DocumentType::create([
+                'name' => 'Revisión técnica',
+                'slug' => 'revision-tecnica',
+                'is_required' => true,
+                'sort_order' => 10,
+            ]);
+        }
 
         return [$user, $vehicle, $type];
     }

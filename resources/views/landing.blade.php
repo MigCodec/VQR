@@ -236,13 +236,13 @@
                 <div class="landing-plan-grid">
                     <article class="landing-plan">
                         <p class="small-label">Normal</p>
-                        <h3>$5.000 <span>CLP / a&ntilde;o</span></h3>
+                        <h3>$4.990 <span>CLP / a&ntilde;o</span></h3>
                         <p>Para mantener los documentos de 1 vehiculo siempre a mano.</p>
                         <a href="/auth/google/redirect" class="btn btn-outline">Empezar con normal</a>
                     </article>
                     <article class="landing-plan landing-plan-featured">
                         <p class="small-label">Premium</p>
-                        <h3>$10.000 <span>CLP / a&ntilde;o</span></h3>
+                        <h3>$9.990 <span>CLP / a&ntilde;o</span></h3>
                         <p>Para administrar hasta 3 vehiculos desde una misma cuenta.</p>
                         <a href="/auth/google/redirect" class="btn btn-primary">Empezar con premium</a>
                     </article>

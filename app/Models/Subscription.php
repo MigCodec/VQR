@@ -12,12 +12,12 @@ class Subscription extends Model
     public const PLANS = [
         'normal' => [
             'label' => 'Normal',
-            'amount' => 5000,
+            'amount' => 4990,
             'vehicle_limit' => 1,
         ],
         'premium' => [
             'label' => 'Premium',
-            'amount' => 10000,
+            'amount' => 9990,
             'vehicle_limit' => 3,
         ],
     ];

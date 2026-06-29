@@ -10,7 +10,7 @@
                 <article class="plan-card">
                     <div>
                         <p class="small-label">Normal</p>
-                        <p class="billing-price">$5.000 <span>CLP / año</span></p>
+                        <p class="billing-price">$4.990 <span>CLP / año</span></p>
                         <p class="section-text">Permite administrar 1 vehículo.</p>
                     </div>
                     <form method="POST" action="{{ route('billing.checkout') }}" class="action-row">
@@ -23,7 +23,7 @@
                 <article class="plan-card plan-card-featured">
                     <div>
                         <p class="small-label">Premium</p>
-                        <p class="billing-price">$10.000 <span>CLP / año</span></p>
+                        <p class="billing-price">$9.990 <span>CLP / año</span></p>
                         <p class="section-text">Permite administrar hasta 3 vehículos.</p>
                     </div>
                     <form method="POST" action="{{ route('billing.checkout') }}" class="action-row">

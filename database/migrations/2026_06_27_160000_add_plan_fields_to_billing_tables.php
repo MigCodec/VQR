@@ -26,25 +26,25 @@ return new class extends Migration
         });
 
         DB::table('subscriptions')
-            ->where('amount', '>=', 10000)
+            ->where('amount', '>=', 9990)
             ->update([
                 'plan' => 'premium',
                 'vehicle_limit' => 3,
             ]);
 
         DB::table('subscriptions')
-            ->where('amount', '<', 10000)
+            ->where('amount', '<', 9990)
             ->update([
                 'plan' => 'normal',
                 'vehicle_limit' => 1,
             ]);
 
         DB::table('payments')
-            ->where('amount', '>=', 10000)
+            ->where('amount', '>=', 9990)
             ->update(['plan' => 'premium']);
 
         DB::table('payments')
-            ->where('amount', '<', 10000)
+            ->where('amount', '<', 9990)
             ->update(['plan' => 'normal']);
     }
 

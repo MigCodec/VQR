@@ -25,7 +25,7 @@ Entidades probables:
 
 - Usuario: puede tener uno o más vehículos asociados.
 - Autenticación: el usuario puede registrarse e iniciar sesión con Google.
-- Suscripción: cada usuario debe pagar una suscripción anual para habilitar su cuenta. Existen dos planes: normal de $5.000 anuales para 1 vehículo y premium de $10.000 anuales para hasta 3 vehículos.
+- Suscripción: cada usuario debe pagar una suscripción anual para habilitar su cuenta. Existen dos planes: normal de $4.990 anuales para 1 vehículo y premium de $9.990 anuales para hasta 3 vehículos.
 - Pago: se procesa mediante Mercado Pago.
 - Tarjeta: pertenece a un usuario, tiene un identificador único detectable por NFC y puede tener un QR impreso con una URL corta pública.
 - Tipos de tarjeta: el sistema debe soportar en paralelo tarjetas QR con link único y tarjetas `NFC TAG 424 DNA`.
@@ -263,7 +263,7 @@ El estado puede guardarse o calcularse; si se calcula desde fechas, mantener la 
 ## Frontend y UX
 
 - La ruta `/` debe ser una landing page inicial del servicio.
-- La landing debe explicar de forma directa el servicio, el precio anual de $5.000, el uso de tarjetas NFC/QR y el acceso a documentos vehiculares.
+- La landing debe explicar de forma directa el servicio, el precio anual de $4.990, el uso de tarjetas NFC/QR y el acceso a documentos vehiculares.
 - La landing debe tener llamadas claras a registro con Google, inicio de sesión y pago/activación cuando aplique.
 - Priorizar diseño móvil, lectura rápida y jerarquía clara.
 - La vista pública de tarjeta debe ser una lista simple de vehículos, optimizada para abrir rápido desde NFC o QR.
@@ -300,8 +300,8 @@ El QR y el NFC deben resolver al mismo destino público siempre que sea posible.
 
 ## Suscripción y pagos
 
-- El plan normal cuesta $5.000 anuales y permite 1 vehículo.
-- El plan premium cuesta $10.000 anuales y permite hasta 3 vehículos.
+- El plan normal cuesta $4.990 anuales y permite 1 vehículo.
+- El plan premium cuesta $9.990 anuales y permite hasta 3 vehículos.
 - La suscripción habilita al usuario para administrar sus vehículos, tarjetas y documentos.
 - Mercado Pago es el proveedor de pago del sistema.
 - El sistema debe crear el flujo de pago con APIs oficiales de Mercado Pago.
@@ -388,5 +388,5 @@ vendor\bin\phpunit.bat
 - Si se requiere historial de documentos anteriores o solo el documento vigente.
 - Si una tarjeta puede cambiar de usuario después de impresa o debe quedar vinculada permanentemente.
 - Si se requiere desactivar una tarjeta perdida sin borrar sus datos.
-- Si el precio anual de $5.000 incluye impuestos, comisiones de Mercado Pago o ambos se absorben por separado.
+- Si el precio anual de $4.990 incluye impuestos, comisiones de Mercado Pago o ambos se absorben por separado.
 - Si también se permitirá registro con correo/contraseña o solo Google.

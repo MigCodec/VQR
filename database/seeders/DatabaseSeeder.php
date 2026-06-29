@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             'status' => 'active',
             'plan' => 'premium',
             'vehicle_limit' => 3,
-            'amount' => 10000,
+            'amount' => 9990,
             'currency' => 'CLP',
             'starts_at' => now()->subDay(),
             'expires_at' => now()->addYear(),

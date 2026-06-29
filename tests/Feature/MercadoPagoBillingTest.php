@@ -54,7 +54,7 @@ class MercadoPagoBillingTest extends TestCase
             'provider' => 'mercado_pago',
             'status' => 'pending',
             'plan' => 'premium',
-            'amount' => 10000,
+            'amount' => 9990,
             'currency' => 'CLP',
         ]);
 
@@ -101,7 +101,7 @@ class MercadoPagoBillingTest extends TestCase
             'provider_payment_id' => 'mp-late-123',
             'status' => 'pending',
             'plan' => 'normal',
-            'amount' => 5000,
+            'amount' => 4990,
             'currency' => 'CLP',
         ]);
 
@@ -136,7 +136,7 @@ class MercadoPagoBillingTest extends TestCase
             'provider_preference_id' => 'pref-123',
             'status' => 'pending',
             'plan' => 'premium',
-            'amount' => 10000,
+            'amount' => 9990,
             'currency' => 'CLP',
         ]);
 
@@ -180,7 +180,7 @@ class MercadoPagoBillingTest extends TestCase
             'provider' => 'mercado_pago',
             'status' => 'pending',
             'plan' => 'normal',
-            'amount' => 5000,
+            'amount' => 4990,
             'currency' => 'CLP',
         ]);
 
@@ -212,7 +212,7 @@ class MercadoPagoBillingTest extends TestCase
             'provider_preference_id' => 'pref-late-123',
             'status' => 'pending',
             'plan' => 'normal',
-            'amount' => 5000,
+            'amount' => 4990,
             'currency' => 'CLP',
         ]);
 

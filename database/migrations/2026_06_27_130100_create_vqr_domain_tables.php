@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('status')->default('pending')->index();
             $table->string('plan')->default('normal')->index();
             $table->unsignedTinyInteger('vehicle_limit')->default(1);
-            $table->unsignedInteger('amount')->default(5000);
+            $table->unsignedInteger('amount')->default(4990);
             $table->string('currency', 3)->default('CLP');
             $table->timestamp('starts_at')->nullable();
             $table->timestamp('expires_at')->nullable()->index();
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('provider_preference_id')->nullable()->index();
             $table->string('status')->default('pending')->index();
             $table->string('plan')->default('normal')->index();
-            $table->unsignedInteger('amount')->default(5000);
+            $table->unsignedInteger('amount')->default(4990);
             $table->string('currency', 3)->default('CLP');
             $table->timestamp('paid_at')->nullable();
             $table->json('raw_payload')->nullable();
