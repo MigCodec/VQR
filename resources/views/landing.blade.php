@@ -1,30 +1,50 @@
 @php
     $structuredData = json_encode([
         '@context' => 'https://schema.org',
-        '@type' => 'FAQPage',
-        'mainEntity' => [
+        '@graph' => [
             [
-                '@type' => 'Question',
-                'name' => 'Que documentos del vehiculo puedo guardar en VQR?',
-                'acceptedAnswer' => [
-                    '@type' => 'Answer',
-                    'text' => 'VQR esta pensado para mantener a mano revision tecnica, SOAP y permiso de circulacion desde una tarjeta que se escanea con el celular.',
+                '@type' => 'Organization',
+                '@id' => url('/').'#organization',
+                'name' => 'VQR',
+                'url' => url('/'),
+                'logo' => url('/brand/vqr-logo.png'),
+            ],
+            [
+                '@type' => 'WebSite',
+                '@id' => url('/').'#website',
+                'name' => 'VQR',
+                'url' => url('/'),
+                'publisher' => [
+                    '@id' => url('/').'#organization',
                 ],
             ],
             [
-                '@type' => 'Question',
-                'name' => 'VQR avisa cuando mis documentos estan por vencer?',
-                'acceptedAnswer' => [
-                    '@type' => 'Answer',
-                    'text' => 'Si. VQR te ayuda a visualizar vencimientos y avisos para anticiparte a la renovacion de documentos importantes del vehiculo.',
-                ],
-            ],
-            [
-                '@type' => 'Question',
-                'name' => 'Necesito instalar una app para ver mis documentos?',
-                'acceptedAnswer' => [
-                    '@type' => 'Answer',
-                    'text' => 'No. La informacion se abre desde el navegador del celular al escanear la tarjeta VQR.',
+                '@type' => 'FAQPage',
+                'mainEntity' => [
+                    [
+                        '@type' => 'Question',
+                        'name' => '¿Qué documentos del vehículo puedo guardar en VQR?',
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => 'VQR está pensado para mantener a mano revisión técnica, SOAP y permiso de circulación desde una tarjeta que se escanea con el celular.',
+                        ],
+                    ],
+                    [
+                        '@type' => 'Question',
+                        'name' => '¿VQR avisa cuando mis documentos están por vencer?',
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => 'Sí. VQR te ayuda a visualizar vencimientos y avisos para anticiparte a la renovación de documentos importantes del vehículo.',
+                        ],
+                    ],
+                    [
+                        '@type' => 'Question',
+                        'name' => '¿Necesito instalar una app para ver mis documentos?',
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => 'No. La información se abre desde el navegador del celular al escanear la tarjeta VQR.',
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -32,8 +52,8 @@
 @endphp
 
 <x-layouts.app
-    title="VQR | Documentos del vehiculo, SOAP, revision tecnica y permiso"
-    meta-description="Ordena revision tecnica, SOAP y permiso de circulacion en una tarjeta VQR. Muestra tus documentos desde el celular y recibe avisos antes del vencimiento."
+    title="VQR | Documentos del vehículo, SOAP, revisión técnica y permiso"
+    meta-description="Ordena revisión técnica, SOAP y permiso de circulación en una tarjeta VQR. Muestra tus documentos desde el celular y recibe avisos antes del vencimiento."
     :structured-data="$structuredData"
 >
     <main class="site-main">
@@ -51,14 +71,15 @@
 
                 <div class="hero-grid">
                     <div class="hero-copy">
-                        <p class="eyebrow">SOAP, revision tecnica y permiso siempre a mano</p>
-                        <h1 class="hero-title">Muestra los documentos de tu vehiculo en segundos.</h1>
+                        <p class="eyebrow">SOAP, revisión técnica y permiso siempre a mano</p>
+                        <h1 class="hero-title">Muestra los documentos de tu vehículo en segundos.</h1>
                         <p class="hero-text">
                             VQR ordena los papeles obligatorios del auto en una tarjeta lista para usar cuando te los pidan.
                         </p>
                         <div class="hero-points">
                             <span>Sin buscar fotos</span>
                             <span>Sin instalar apps</span>
+                            <span>Asistencia inteligente</span>
                             <span>Con avisos de vencimiento</span>
                         </div>
                         <div class="action-row">
@@ -114,7 +135,7 @@
                         <div class="hero-status-panel">
                             <div>
                                 <p class="small-label">Estado documental</p>
-                                <strong>Todo al dia</strong>
+                                <strong>Todo al día</strong>
                             </div>
                             <span class="pill pill-blue">Listo para mostrar</span>
                         </div>
@@ -127,9 +148,9 @@
             <div class="container">
                 <div class="section-heading">
                     <p class="eyebrow">Beneficios</p>
-                    <h2 class="section-title">Mas orden, menos preocupacion</h2>
+                    <h2 class="section-title">Más orden, menos preocupación</h2>
                     <p class="section-text">
-                        Ten a mano SOAP, revision tecnica y permiso de circulacion, y anticipate a vencimientos antes de que se transformen en un problema.
+                        Ten a mano SOAP, revisión técnica y permiso de circulación, y anticípate a vencimientos antes de que se transformen en un problema.
                     </p>
                 </div>
 
@@ -137,22 +158,22 @@
                     <article class="feature-card">
                         <img src="/brand/benefits/card.svg" alt="" class="feature-image" loading="lazy">
                         <h3>Todo desde una tarjeta</h3>
-                        <p>Escanea y accede a los papeles del vehiculo sin buscar carpetas, fotos o archivos sueltos.</p>
+                        <p>Escanea y accede a los papeles del vehículo sin buscar carpetas, fotos o archivos sueltos.</p>
                     </article>
                     <article class="feature-card">
                         <img src="/brand/benefits/checkpoint.svg" alt="" class="feature-image" loading="lazy">
                         <h3>Listo cuando te lo pidan</h3>
-                        <p>Para controles, emergencias o tramites, muestra lo importante en pocos segundos.</p>
+                        <p>Para controles, emergencias o trámites, muestra lo importante en pocos segundos.</p>
                     </article>
                     <article class="feature-card">
                         <img src="/brand/benefits/documents.svg" alt="" class="feature-image" loading="lazy">
-                        <h3>Documentos en orden</h3>
-                        <p>Revision tecnica, SOAP y permiso de circulacion reunidos en un solo lugar.</p>
+                        <h3>Carga inteligente</h3>
+                        <p>Sube tus documentos y VQR te ayuda a reconocer la información importante automáticamente.</p>
                     </article>
                     <article class="feature-card">
                         <img src="/brand/benefits/mobile.svg" alt="" class="feature-image" loading="lazy">
                         <h3>Sin instalar aplicaciones</h3>
-                        <p>Abre la informacion desde el celular y comparte lo necesario sin complicaciones.</p>
+                        <p>Abre la información desde el celular y comparte lo necesario sin complicaciones.</p>
                     </article>
                     <article class="feature-card">
                         <img src="/brand/benefits/status.svg" alt="" class="feature-image" loading="lazy">
@@ -162,7 +183,7 @@
                     <article class="feature-card">
                         <img src="/brand/benefits/daily.svg" alt="" class="feature-image" loading="lazy">
                         <h3>Para autos personales o flotas</h3>
-                        <p>Sirve para conductores, familias y empresas que necesitan tener sus vehiculos bajo control.</p>
+                        <p>Sirve para conductores, familias y empresas que necesitan tener sus vehículos bajo control.</p>
                     </article>
                 </div>
             </div>
@@ -171,7 +192,7 @@
         <section class="section section-alt">
             <div class="container">
                 <div class="section-heading">
-                    <p class="eyebrow">Como funciona</p>
+                    <p class="eyebrow">Cómo funciona</p>
                     <h2 class="section-title">De tus documentos al celular en tres pasos</h2>
                 </div>
 
@@ -179,17 +200,17 @@
                     <article class="step-item">
                         <span>1</span>
                         <h3>Crea tu cuenta</h3>
-                        <p>Activa tu licencia anual y agrega los datos de tu vehiculo.</p>
+                        <p>Activa tu licencia anual y agrega los datos de tu vehículo.</p>
                     </article>
                     <article class="step-item">
                         <span>2</span>
                         <h3>Sube tus documentos</h3>
-                        <p>Guarda revision tecnica, SOAP y permiso de circulacion en tu panel.</p>
+                        <p>VQR te ayuda a ordenar la información clave sin llenar datos a mano.</p>
                     </article>
                     <article class="step-item">
                         <span>3</span>
                         <h3>Usa tu tarjeta VQR</h3>
-                        <p>Escaneala desde el celular y muestra los papeles cuando los necesites.</p>
+                        <p>Escanéala desde el celular y muestra los papeles cuando los necesites.</p>
                     </article>
                 </div>
             </div>
@@ -198,10 +219,10 @@
         <section class="section">
             <div class="container">
                 <div class="section-heading">
-                    <p class="eyebrow">Documentos del vehiculo</p>
+                    <p class="eyebrow">Documentos del vehículo</p>
                     <h2 class="section-title">Lo importante, reunido en un solo lugar</h2>
                     <p class="section-text">
-                        En Chile, conductores y empresas suelen necesitar tener claros sus documentos vigentes para controles, tramites y renovaciones.
+                        En Chile, conductores y empresas suelen necesitar tener claros sus documentos vigentes para controles, trámites y renovaciones.
                     </p>
                 </div>
 
@@ -209,15 +230,15 @@
                     <article class="document-focus-item">
                         <span>SOAP</span>
                         <h3>Seguro obligatorio</h3>
-                        <p>Guarda tu SOAP y tenlo disponible junto al resto de los papeles del vehiculo.</p>
+                        <p>Guarda tu SOAP y tenlo disponible junto al resto de los papeles del vehículo.</p>
                     </article>
                     <article class="document-focus-item">
-                        <span>Revision tecnica</span>
+                        <span>Revisión técnica</span>
                         <h3>Vigencia visible</h3>
                         <p>Revisa el estado y la fecha de vencimiento para no enterarte tarde.</p>
                     </article>
                     <article class="document-focus-item">
-                        <span>Permiso de circulacion</span>
+                        <span>Permiso de circulación</span>
                         <h3>Listo para marzo</h3>
                         <p>Manten el permiso ordenado y accesible cuando lo necesites consultar.</p>
                     </article>
@@ -225,11 +246,42 @@
             </div>
         </section>
 
+        <section class="section section-alt">
+            <div class="container legal-story">
+                <div class="section-heading">
+                    <p class="eyebrow">Respaldo y orden digital</p>
+                    <h2 class="section-title">La ley avanzo hacia lo digital. VQR lo hace simple para ti.</h2>
+                    <p class="section-text">
+                        En Chile, la Ley N 19.799 reconoce los documentos electrónicos y su equivalencia con el soporte en papel cuando cumplen las condiciones legales aplicables. Al mismo tiempo, la normativa de tránsito exige mantener vigentes documentos como el permiso de circulación, el SOAP y la revisión técnica.
+                    </p>
+                </div>
+
+                <div class="legal-story-grid">
+                    <article class="legal-story-item">
+                        <h3>Documentos oficiales, siempre accesibles</h3>
+                        <p>VQR no reemplaza a las instituciones que emiten tus documentos. Los mantiene ordenados, visibles y listos para consultar desde el celular cuando los necesites.</p>
+                    </article>
+                    <article class="legal-story-item">
+                        <h3>Menos fricción en el día a día</h3>
+                        <p>Sube tus archivos, deja que VQR te ayude a detectar fechas importantes y evita depender de fotos perdidas, correos antiguos o carpetas dificiles de encontrar.</p>
+                    </article>
+                    <article class="legal-story-item">
+                        <h3>Formal, claro y verificable</h3>
+                        <p>La experiencia está pensada para mostrar información de manera ordenada, con acceso rápido mediante QR o NFC y con foco en documentos vigentes.</p>
+                    </article>
+                </div>
+
+                <p class="legal-note">
+                    Referencias: <a href="https://www.bcn.cl/leychile/navegar?idNorma=196640" target="_blank" rel="noopener">Ley N 19.799 sobre documentos electrónicos y firma electrónica</a> y <a href="https://www.chileatiende.gob.cl/fichas/9611-permiso-de-circulacion" target="_blank" rel="noopener">ChileAtiende sobre permiso de circulación y documentos requeridos</a>.
+                </p>
+            </div>
+        </section>
+
         <section id="planes" class="section">
             <div class="container">
                 <div class="section-heading">
                     <p class="eyebrow">Planes</p>
-                    <h2 class="section-title">Elige segun la cantidad de vehiculos</h2>
+                    <h2 class="section-title">Elige según la cantidad de vehículos</h2>
                     <p class="section-text">Pago anual simple para mantener tu cuenta activa y tus documentos disponibles.</p>
                 </div>
 
@@ -237,19 +289,19 @@
                     <article class="landing-plan">
                         <p class="small-label">Normal</p>
                         <h3>$4.990 <span>CLP / a&ntilde;o</span></h3>
-                        <p>Para mantener los documentos de 1 vehiculo siempre a mano.</p>
+                        <p>Para mantener los documentos de 1 vehículo siempre a mano.</p>
                         <a href="/auth/google/redirect" class="btn btn-outline">Empezar con normal</a>
                     </article>
                     <article class="landing-plan landing-plan-featured">
                         <p class="small-label">Premium</p>
                         <h3>$9.990 <span>CLP / a&ntilde;o</span></h3>
-                        <p>Para administrar hasta 3 vehiculos desde una misma cuenta.</p>
+                        <p>Para administrar hasta 3 vehículos desde una misma cuenta.</p>
                         <a href="/auth/google/redirect" class="btn btn-primary">Empezar con premium</a>
                     </article>
                     <article class="landing-plan landing-plan-enterprise">
                         <p class="small-label">Empresa</p>
-                        <h3>Hablemos <span>Solucion a medida</span></h3>
-                        <p>Para equipos, flotas o empresas que necesitan gestionar mas vehiculos y tarjetas.</p>
+                        <h3>Hablemos <span>Solución a medida</span></h3>
+                        <p>Para equipos, flotas o empresas que necesitan gestionar más vehículos y tarjetas.</p>
                         <a href="mailto:contacto@vqr.cl?subject=Plan%20Empresa%20VQR" class="btn btn-outline">Hablemos</a>
                     </article>
                 </div>
@@ -265,20 +317,20 @@
 
                 <div class="faq-list">
                     <details>
-                        <summary>Que documentos puedo ordenar en VQR?</summary>
-                        <p>Revision tecnica, SOAP y permiso de circulacion. La idea es que los papeles mas pedidos del vehiculo esten siempre disponibles desde el celular.</p>
+                        <summary>¿Qué documentos puedo ordenar en VQR?</summary>
+                        <p>Revisión técnica, SOAP y permiso de circulación. La idea es que los papeles más pedidos del vehículo estén siempre disponibles desde el celular.</p>
                     </details>
                     <details>
-                        <summary>VQR reemplaza los tramites oficiales?</summary>
+                        <summary>¿VQR reemplaza los trámites oficiales?</summary>
                         <p>No. VQR ayuda a ordenar, mostrar y recordar tus documentos. Las compras, pagos o renovaciones oficiales se hacen en los canales correspondientes.</p>
                     </details>
                     <details>
                         <summary>Me avisa si un documento esta por vencer?</summary>
-                        <p>Si. VQR muestra vencimientos y avisos para que puedas renovar con tiempo tu SOAP, revision tecnica o permiso de circulacion.</p>
+                        <p>Sí. VQR muestra vencimientos y avisos para que puedas renovar con tiempo tu SOAP, revisión técnica o permiso de circulación.</p>
                     </details>
                     <details>
-                        <summary>Necesito instalar una aplicacion?</summary>
-                        <p>No. Al escanear la tarjeta VQR, la informacion se abre desde el navegador del celular.</p>
+                        <summary>¿Necesito instalar una aplicación?</summary>
+                        <p>No. Al escanear la tarjeta VQR, la información se abre desde el navegador del celular.</p>
                     </details>
                 </div>
             </div>

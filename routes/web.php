@@ -13,12 +13,22 @@ use App\Http\Controllers\MercadoPagoWebhookController;
 use App\Http\Controllers\PublicCardController;
 use App\Http\Controllers\PublicCardQrController;
 use App\Http\Controllers\PublicVehicleController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', LandingController::class)->name('landing');
 
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('landing');
+})->name('logout');
 
 Route::get('/account', [AccountController::class, 'show'])->name('account.show');
 Route::get('/account/cards/{card}/qr.svg', [AccountCardQrController::class, 'show'])->name('account.cards.qr');

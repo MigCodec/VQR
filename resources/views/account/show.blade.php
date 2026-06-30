@@ -17,6 +17,10 @@
                     @if ($subscription)
                         <p class="page-subtitle">Activa hasta {{ $subscription->expires_at?->format('d-m-Y') }}</p>
                     @endif
+                    <form method="POST" action="{{ route('logout') }}" class="inline-action-form">
+                        @csrf
+                        <button type="submit" class="btn btn-outline">Cerrar sesión</button>
+                    </form>
                     @if ($user->isAdmin())
                         <a href="{{ route('admin.dashboard') }}" class="btn btn-outline">Panel admin</a>
                     @endif
@@ -57,7 +61,7 @@
                             <div class="card-topline">
                                 <div>
                                     <p class="card-brand">VQR</p>
-                                    <p class="card-tagline">Tu vehiculo. Tu informacion.</p>
+                                    <p class="card-tagline">Tu vehículo. Tu información.</p>
                                 </div>
                                 <div class="nfc-mark" aria-label="NFC">
                                     <span></span>
@@ -70,7 +74,7 @@
                                 <div class="card-copy">
                                     <p class="card-label">Tarjeta de la cuenta</p>
                                     <p class="card-plate">VQR</p>
-                                    <p class="card-helper">Escanea para ver vehiculos</p>
+                                    <p class="card-helper">Escanea para ver vehículos</p>
                                 </div>
                                 <div class="card-qr-block account-card-real-qr">
                                     <img src="{{ route('public.cards.qr', $accountCard->short_code) }}" alt="QR de tarjeta VQR">
@@ -115,10 +119,10 @@
                         <span>VIN / Chasis</span>
                         <input name="vin" value="{{ old('vin') }}" placeholder="Opcional">
                     </label>
-                    <button class="btn btn-primary" type="submit">Agregar vehiculo</button>
+                    <button class="btn btn-primary" type="submit">Agregar vehículo</button>
                 </form>
             @else
-                <p class="section-text">Tu licencia actual no permite agregar mas vehiculos.</p>
+                <p class="section-text">Tu licencia actual no permite agregar más vehículos.</p>
             @endif
         </section>
 
@@ -141,7 +145,7 @@
                     <div class="document-section-head">
                         <div>
                             <h3>Documentos requeridos</h3>
-                            <p class="muted-small">Sube o reemplaza revision tecnica, SOAP y permiso de circulacion.</p>
+                            <p class="muted-small">Sube o reemplaza revisión técnica, SOAP y permiso de circulación.</p>
                         </div>
                     </div>
 
@@ -165,10 +169,10 @@
                                             @if ($document)
                                                 Vence {{ $document->expires_at?->format('d-m-Y') ?: 'sin fecha' }}
                                             @else
-                                                Sube el archivo y VQR intentara detectar los datos automaticamente
+                                                Sube el archivo y VQR intentará detectar los datos automáticamente
                                             @endif
                                             @if ($document?->ai_extracted)
-                                                · Datos detectados automaticamente
+                                                · Datos detectados automáticamente
                                             @endif
                                         </p>
                                     </div>
@@ -184,7 +188,7 @@
                                                 <dd>{{ $document->folio ?: 'No detectado' }}</dd>
                                             </div>
                                             <div>
-                                                <dt>Emision</dt>
+                                                <dt>Emisión</dt>
                                                 <dd>{{ $document->issued_at?->format('d-m-Y') ?: 'No detectada' }}</dd>
                                             </div>
                                             <div>
@@ -206,7 +210,7 @@
             @empty
                 <article class="panel">
                     <h2 class="section-title">Vehiculos</h2>
-                    <p class="section-text">Aun no tienes vehiculos asociados.</p>
+                    <p class="section-text">Aún no tienes vehículos asociados.</p>
                 </article>
             @endforelse
         </section>
