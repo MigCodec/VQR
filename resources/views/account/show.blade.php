@@ -165,7 +165,10 @@
                                             @if ($document)
                                                 Vence {{ $document->expires_at?->format('d-m-Y') ?: 'sin fecha' }}
                                             @else
-                                                Documento pendiente
+                                                Sube el archivo y VQR intentara detectar los datos automaticamente
+                                            @endif
+                                            @if ($document?->ai_extracted)
+                                                · Datos detectados automaticamente
                                             @endif
                                         </p>
                                     </div>
@@ -174,25 +177,27 @@
 
                                 <form method="POST" action="{{ route('account.vehicles.documents.store', [$vehicle, $documentType]) }}" enctype="multipart/form-data" class="upload-form">
                                     @csrf
-                                    <label>
-                                        <span>Folio</span>
-                                        <input name="folio" value="{{ old('folio', $document?->folio) }}" placeholder="Opcional">
-                                    </label>
-                                    <div class="form-grid">
-                                        <label>
-                                            <span>Emision</span>
-                                            <input type="date" name="issued_at" value="{{ old('issued_at', $document?->issued_at?->format('Y-m-d')) }}">
-                                        </label>
-                                        <label>
-                                            <span>Vencimiento</span>
-                                            <input type="date" name="expires_at" value="{{ old('expires_at', $document?->expires_at?->format('Y-m-d')) }}" required>
-                                        </label>
-                                    </div>
+                                    @if ($document)
+                                        <dl class="document-auto-meta">
+                                            <div>
+                                                <dt>Folio</dt>
+                                                <dd>{{ $document->folio ?: 'No detectado' }}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>Emision</dt>
+                                                <dd>{{ $document->issued_at?->format('d-m-Y') ?: 'No detectada' }}</dd>
+                                            </div>
+                                            <div>
+                                                <dt>Vencimiento</dt>
+                                                <dd>{{ $document->expires_at?->format('d-m-Y') ?: 'No detectado' }}</dd>
+                                            </div>
+                                        </dl>
+                                    @endif
                                     <label>
                                         <span>Archivo</span>
                                         <input type="file" name="document" accept=".pdf,.jpg,.jpeg,.png,.webp" required>
                                     </label>
-                                    <button class="btn btn-primary" type="submit">Subir documento</button>
+                                    <button class="btn btn-primary" type="submit">Subir y detectar datos</button>
                                 </form>
                             </section>
                         @endforeach

@@ -11,6 +11,7 @@ use App\Models\VehicleDocument;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -29,7 +30,10 @@ class AccountPanelTest extends TestCase
             ->assertSee('Revision tecnica')
             ->assertSee('Tarjeta de la cuenta')
             ->assertSee(route('public.cards.qr', $user->cards()->first()->short_code), false)
-            ->assertSee('Subir documento');
+            ->assertSee('Subir y detectar datos')
+            ->assertDontSee('name="folio"', false)
+            ->assertDontSee('name="issued_at"', false)
+            ->assertDontSee('name="expires_at"', false);
 
         $card = Card::firstOrFail();
 
@@ -74,7 +78,10 @@ class AccountPanelTest extends TestCase
         $documentUrl = route('public.vehicles.documents.show', [$vehicle->public_token, $document->public_token]);
 
         $this->assertStringContainsString($document->public_token, $documentUrl);
-        $this->assertStringNotContainsString('/documents/'.$document->id, $documentUrl);
+        $this->assertNotSame(
+            route('public.vehicles.documents.show', [$vehicle->public_token, (string) $document->id]),
+            $documentUrl
+        );
 
         $this->get($documentUrl)
             ->assertOk()
@@ -111,6 +118,67 @@ class AccountPanelTest extends TestCase
             ->assertHeader('Content-Disposition', 'inline; filename="revision.pdf"');
 
         File::deleteDirectory(storage_path('app/vehicle-documents-legacy-test'));
+    }
+
+    public function test_upload_extracts_document_dates_with_openrouter_when_manual_dates_are_empty(): void
+    {
+        Storage::fake('local');
+        config(['services.openrouter.api_key' => 'test-openrouter-key']);
+
+        Http::fake([
+            'https://openrouter.ai/api/v1/chat/completions' => Http::response([
+                'choices' => [[
+                    'message' => [
+                        'content' => json_encode([
+                            'document_type' => 'Revision tecnica',
+                            'folio' => 'AI-123',
+                            'plate' => 'TEST-10',
+                            'issued_at' => '2026-01-15',
+                            'expires_at' => '2027-01-15',
+                            'issuer' => 'Planta revisora',
+                            'confidence' => 0.91,
+                        ]),
+                    ],
+                ]],
+            ]),
+        ]);
+
+        [$user, $vehicle, $type] = $this->createLicensedVehicle();
+
+        $this->actingAs($user)
+            ->post(route('account.vehicles.documents.store', [$vehicle, $type]), [
+                'document' => UploadedFile::fake()->create('revision.pdf', 120, 'application/pdf'),
+            ])
+            ->assertRedirect(route('account.show'));
+
+        $document = VehicleDocument::firstOrFail();
+
+        $this->assertSame('AI-123', $document->folio);
+        $this->assertSame('2026-01-15', $document->issued_at->toDateString());
+        $this->assertSame('2027-01-15', $document->expires_at->toDateString());
+        $this->assertSame('valid', $document->status);
+        $this->assertTrue($document->ai_extracted);
+        $this->assertSame('TEST-10', $document->ai_metadata['plate']);
+    }
+
+    public function test_upload_without_detected_expiration_is_saved_as_pending(): void
+    {
+        Storage::fake('local');
+        config(['services.openrouter.api_key' => null]);
+
+        [$user, $vehicle, $type] = $this->createLicensedVehicle();
+
+        $this->actingAs($user)
+            ->post(route('account.vehicles.documents.store', [$vehicle, $type]), [
+                'document' => UploadedFile::fake()->create('revision.pdf', 120, 'application/pdf'),
+            ])
+            ->assertRedirect(route('account.show'));
+
+        $document = VehicleDocument::firstOrFail();
+
+        $this->assertSame('pending', $document->status);
+        $this->assertNull($document->expires_at);
+        $this->assertFalse($document->ai_extracted);
     }
 
     public function test_public_document_view_supports_private_prefixed_path(): void

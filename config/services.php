@@ -40,6 +40,12 @@ return [
         'webhook_secret' => env('MERCADO_PAGO_WEBHOOK_SECRET'),
     ],
 
+    'openrouter' => [
+        'api_key' => env('OPENROUTER_API_KEY'),
+        'model' => env('OPENROUTER_MODEL', 'google/gemini-2.5-flash-lite'),
+        'pdf_engine' => env('OPENROUTER_PDF_ENGINE', 'cloudflare-ai'),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

@@ -21,6 +21,9 @@ class VehicleDocument extends Model
         'file_path',
         'source_url',
         'notes',
+        'ai_extracted',
+        'ai_extracted_at',
+        'ai_metadata',
     ];
 
     protected function casts(): array
@@ -28,6 +31,9 @@ class VehicleDocument extends Model
         return [
             'issued_at' => 'date',
             'expires_at' => 'date',
+            'ai_extracted' => 'boolean',
+            'ai_extracted_at' => 'datetime',
+            'ai_metadata' => 'array',
         ];
     }
 
